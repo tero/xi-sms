@@ -80,6 +80,7 @@ class IpxGateway extends AbstractGateway
 
     /**
      * @param \Xi\Sms\SmsMessage $message
+     * @param array $params
      * @return boolean true if send was successful for all receivers
      */
     public function send(SmsMessage $message, $params = array())
