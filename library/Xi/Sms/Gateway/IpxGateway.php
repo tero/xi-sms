@@ -80,14 +80,16 @@ class IpxGateway extends AbstractGateway
 
     /**
      * @param \Xi\Sms\SmsMessage $message
+     * @param array $params
      * @return boolean true if send was successful for all receivers
      */
-    public function send(SmsMessage $message)
+    public function send(SmsMessage $message, $params = array())
     {
         $result = $this->sendMessage(
             $message->getFrom(),
             $message->getTo(),
-            $message->getBody()
+            $message->getBody(),
+            $params
         );
 
         $this->dispatchSendEvent($message);
@@ -189,9 +191,10 @@ class IpxGateway extends AbstractGateway
      * @param string $from
      * @param string|array $to
      * @param string $body
+     * @param array $params
      * @return bool true on successful send
      */
-    protected function sendMessage($from, $to, $body)
+    protected function sendMessage($from, $to, $body, $params)
     {
         $client = $this->getClient();
 
@@ -201,7 +204,7 @@ class IpxGateway extends AbstractGateway
             $messageCount = count($parts);
 
             foreach($parts as $index => $body) {
-                $params = array('userDataHeader' => sprintf('0500030F%02d%02d', $messageCount, $index+1));
+                $params['userDataHeader'] = sprintf('0500030F%02d%02d', $messageCount, $index+1);
                 $params = $this->getParams($from, $to, $body, $params);
                 $result = $client->__soapCall('send', array('request' => $params));
             }
