@@ -204,9 +204,10 @@ class IpxGateway extends AbstractGateway
             $messageCount = count($parts);
 
             foreach($parts as $index => $body) {
-                $params['userDataHeader'] = sprintf('0500030F%02d%02d', $messageCount, $index+1);
-                $params = $this->getParams($from, $to, $body, $params);
-                $result = $client->__soapCall('send', array('request' => $params));
+                $messageParams = $params;
+                $messageParams['userDataHeader'] = sprintf('0500030F%02d%02d', $messageCount, $index+1);
+                $messageParams = $this->getParams($from, $to, $body, $messageParams);
+                $result = $client->__soapCall('send', array('request' => $messageParams));
             }
         }
         else {
