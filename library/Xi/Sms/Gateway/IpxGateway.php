@@ -210,7 +210,7 @@ class IpxGateway extends AbstractGateway
             }
         }
         else {
-            $params = $this->getParams($from, $to, $body);
+            $params = $this->getParams($from, $to, $body, $params);
             $result = $client->__soapCall('send', array('request' => $params));
         }
 
